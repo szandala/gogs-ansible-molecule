@@ -1,2 +1,5 @@
 ---
-# tasks file for gogs
+- name: Adding a 'gogs' user
+  user:
+    name: gogs
+    shell: /sbin/nologin

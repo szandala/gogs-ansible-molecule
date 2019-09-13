@@ -13,3 +13,9 @@ def test_hosts_file(host):
     assert f.exists
     assert f.user == 'root'
     assert f.group == 'root'
+
+def test_user_gogs(host):
+    u = host.user("gogs")
+
+    assert u.exists
+    assert u.shell == "/sbin/nologin", "Incorrect shell value"

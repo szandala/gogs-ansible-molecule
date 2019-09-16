@@ -7,12 +7,14 @@ lint:
   name: yamllint
 platforms:
   - name: instance
-    image: centos:7
+    image: ubuntu:18.04
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
 verifier:
   name: testinfra
+  # options:
+  #   s: True
   lint:
     name: flake8

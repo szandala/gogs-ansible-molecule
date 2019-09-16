@@ -1,2 +1,6 @@
 ---
-# vars file for gogs
+packages_2_be_installed:
+  - postgresql
+  - golang-go
+  - nginx
+  - git

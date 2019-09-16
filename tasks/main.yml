@@ -3,3 +3,7 @@
   user:
     name: gogs
     shell: /sbin/nologin
+- name: Installing packages
+  apt:
+    name: "{{ item }}"
+  loop: "{{ packages_2_be_installed }}"

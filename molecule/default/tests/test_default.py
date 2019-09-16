@@ -19,3 +19,19 @@ def test_user_gogs(host):
 
     assert u.exists
     assert u.shell == "/sbin/nologin", "Incorrect shell value"
+
+def test_gogs_dependencies(host):
+    req_packages = _determine_packages_per_distro(host.system_info.distribution)
+    for package in req_packages:
+        assert host.package(package).is_installed
+
+def _determine_packages_per_distro(distro):
+    print(f"Checking packages for {distro}")
+    if distro == "ubuntu":
+        return [
+            "postgresql",
+            "golang-go",
+            "nginx",
+            "git"
+        ]
+    # TODO: add more distros in future

@@ -4,3 +4,5 @@ packages_2_be_installed:
   - golang-go
   - nginx
   - git
+
+gopath: "/go"

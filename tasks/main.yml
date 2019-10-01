@@ -2,8 +2,25 @@
 - name: Adding a 'gogs' user
   user:
     name: gogs
-    shell: /sbin/nologin
+    shell: /usr/sbin/nologin
+
 - name: Installing packages
   apt:
     name: "{{ item }}"
+    force_apt_get: true
   loop: "{{ packages_2_be_installed }}"
+
+- name: Create Go's sources directory
+  file:
+    path: "{{ gopath }}"
+    state: directory
+    owner: gogs
+
+- name: Getting Gogs & ska.
+  shell: |
+    go get -u github.com/gogs/gogs
+    cd ${GOPATH}/src/github.com/gogs/gogs
+    go build github.com/gogs/gogs
+  become_user: gogs
+  environment:
+    GOPATH: "{{ gopath }}"

@@ -21,6 +21,8 @@
     go get -u github.com/gogs/gogs
     cd ${GOPATH}/src/github.com/gogs/gogs
     go build github.com/gogs/gogs
+  args:
+    creates: "{{ gopath }}/src/github.com/gogs/gogs/gogs"
   become_user: gogs
   environment:
     GOPATH: "{{ gopath }}"

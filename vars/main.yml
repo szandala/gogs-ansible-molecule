@@ -4,5 +4,6 @@ packages_2_be_installed:
   - golang-go
   - nginx
   - git
+  - python-psycopg2
 
 gopath: "/go"

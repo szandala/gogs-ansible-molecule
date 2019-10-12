@@ -27,9 +27,22 @@
   environment:
     GOPATH: "{{ gopath }}"
 
-  - name: Start service PostgreSQL
-    service:
-      name: postgresql
-      state: started
-      enabled: true
+- name: Start service PostgreSQL
+  service:
+    name: postgresql
+    state: started
+    enabled: true
 
+- name: Create a new database with name gogs
+  postgresql_db:
+    name: gogs
+  become: yes
+  become_user: postgres
+
+- name: Connect to gogs database, create user gogs and grant access to the database
+  postgresql_user:
+    db: gogs
+    name: gogs
+    password: gogs
+  become: yes
+  become_user: postgres

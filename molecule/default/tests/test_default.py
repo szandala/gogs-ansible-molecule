@@ -14,16 +14,19 @@ def test_hosts_file(host):
     assert f.user == 'root'
     assert f.group == 'root'
 
+
 def test_user_gogs(host):
     u = host.user("gogs")
 
     assert u.exists
     assert u.shell == "/sbin/nologin", "Incorrect shell value"
 
+
 def test_gogs_dependencies(host):
     req_packages = _determine_packages_per_distro(host.system_info.distribution)
     for package in req_packages:
         assert host.package(package).is_installed
+
 
 def _determine_packages_per_distro(distro):
     print(f"Checking packages for {distro}")

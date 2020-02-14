@@ -7,3 +7,7 @@ packages_2_be_installed:
   - python-psycopg2
 
 gopath: "/go"
+
+postgres_db: "gogs"
+postgres_db_user: "gogs"
+postgres_db_password: "gogs"

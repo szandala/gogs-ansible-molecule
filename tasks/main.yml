@@ -17,13 +17,22 @@
     owner: gogs
 
 - name: Getting Gogs & ska.
-  shell: |
-    go get -u github.com/gogs/gogs
-    cd ${GOPATH}/src/github.com/gogs/gogs
-    go build github.com/gogs/gogs
-  args:
-    creates: "{{ gopath }}/src/github.com/gogs/gogs/gogs"
+  git:
+    repo: https://github.com/gogs/gogs.git
+    dest: "{{ gopath }}/gogs"
+    version: master
+    update: no
   become_user: gogs
+  become: yes
+  environment:
+    GOPATH: "{{ gopath }}"
+
+- name: Install Gogs
+  shell:
+    cmd: go build -o gogs
+    chdir: "{{ gopath }}/gogs"
+  become_user: gogs
+  become: yes
   environment:
     GOPATH: "{{ gopath }}"
 
@@ -35,14 +44,25 @@
 
 - name: Create a new database with name gogs
   postgresql_db:
-    name: gogs
+    name: "{{ postgres_db }}"
   become: yes
   become_user: postgres
 
 - name: Connect to gogs database, create user gogs and grant access to the database
   postgresql_user:
-    db: gogs
-    name: gogs
-    password: gogs
+    db: "{{ postgres_db }}"
+    name: "{{ postgres_db_user }}"
+    password: "{{ postgres_db_password }}"
   become: yes
   become_user: postgres
+
+- name: Ensures {{ gopath }}/custom/conf/ dir exists
+  file:
+    path: "{{ gopath }}/custom/conf/"
+    state: directory
+
+- name: Copy a new app.ini file into place
+  template:
+    src: files/app.ini
+    dest: "{{ gopath }}/custom/conf/app.ini"
+    backup: yes

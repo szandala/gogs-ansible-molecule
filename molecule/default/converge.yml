@@ -5,7 +5,8 @@
   tasks:
     - name: Install gnupg & software-properties-common
       apt:
-        name: [gnupg, software-properties-common]
+        name: [software-properties-common, gnupg2]
+        update_cache: true
 
     - name: Run gogs role
       include_role:

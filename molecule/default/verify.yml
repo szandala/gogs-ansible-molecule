@@ -1,0 +1,46 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Collect packages facts
+      package_facts:
+
+    - name: Verify required packages
+      assert:
+        that: "'{{ item }}' in ansible_facts.packages"
+      loop:
+        - postgresql
+        - golang-go
+        - nginx
+        - git
+
+    - name: Get info about user gogs
+      getent:
+        database: passwd
+        key: gogs
+        fail_key: false
+
+    - name: Verify user gogs
+      assert:
+        that:
+          - "'gogs' in {{ getent_passwd.keys() | list }}"
+          - "'/usr/sbin/nologin' == getent_passwd.gogs[-1]"
+        msg: "'gogs' user not found or doesn't have shell='/usr/sbin/nologin'"
+
+    - name: Collect services facts
+      service_facts:
+
+    - name: Verify gogs service
+      assert:
+        that:
+          - "'gogs.service' in {{ ansible_facts.services.keys() | list }}"
+          - "ansible_facts.services['gogs.service'].state == 'running'"
+          - "ansible_facts.services['gogs.service'].status == 'enabled'"
+        msg: "'gogs.service' is not found, not running or not enabled"
+
+    - name: Check if port 3000 is listening
+      wait_for:
+        host: 0.0.0.0
+        port: 3000
+        state: started
+        timeout: 10

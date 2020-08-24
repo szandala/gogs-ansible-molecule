@@ -19,11 +19,12 @@ def test_user_gogs(host):
     u = host.user("gogs")
 
     assert u.exists
-    assert u.shell == "/sbin/nologin", "Incorrect shell value"
+    assert u.shell == "/usr/sbin/nologin", "Incorrect shell value"
 
 
 def test_gogs_dependencies(host):
-    req_packages = _determine_packages_per_distro(host.system_info.distribution)
+    req_packages = _determine_packages_per_distro(
+        host.system_info.distribution)
     for package in req_packages:
         assert host.package(package).is_installed
 
@@ -38,3 +39,11 @@ def _determine_packages_per_distro(distro):
             "git"
         ]
     # TODO: add more distros in future
+
+def test_gogs_is_running(host):
+    gogs = host.service("gogs")
+    assert gogs.is_running
+    assert gogs.is_enabled
+
+def test_port_3000_listening(host):
+    assert host.socket("tcp://3000").is_listening

@@ -1,2 +1,7 @@
 ---
-# handlers file for gogs
+- name: Restart & enable gogs
+  service:
+    name: gogs
+    state: restarted
+    enabled: true
+  listen: gogs_restart

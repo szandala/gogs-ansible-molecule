@@ -4,6 +4,9 @@
     name: gogs
     shell: /usr/sbin/nologin
 
+- apt_repository:
+    repo: ppa:longsleep/golang-backports
+
 - name: Installing packages
   apt:
     name: "{{ item }}"
@@ -28,9 +31,10 @@
     GOPATH: "{{ gopath }}"
 
 - name: Install Gogs
-  shell:
+  shell: # noqa 305
     cmd: go build -o gogs
     chdir: "{{ gopath }}/gogs"
+    creates: "{{ gopath }}/gogs/gogs"
   become_user: gogs
   become: yes
   environment:
@@ -63,6 +67,14 @@
 
 - name: Copy a new app.ini file into place
   template:
-    src: files/app.ini
+    src: app.ini.j2
     dest: "{{ gopath }}/custom/conf/app.ini"
     backup: yes
+  notify: gogs_restart
+
+- name: Install gogs as a service
+  template:
+    src: gogs.service.j2
+    dest: "/etc/systemd/system/gogs.service"
+    backup: yes
+  notify: gogs_restart

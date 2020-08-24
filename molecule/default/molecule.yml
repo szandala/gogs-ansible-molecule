@@ -3,19 +3,17 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
+lint: ansible-lint . || true
 platforms:
   - name: instance
-    image: ubuntu:19.10
+    no_log: false
+    image: jrei/systemd-ubuntu:${MC_UBUNTU_VERSION:-20.04}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    command: "/sbin/init"
 provisioner:
   name: ansible
-  # log: true
-  lint:
-    name: ansible-lint
 verifier:
   name: testinfra
-  # options:
-  #   s: True
-  lint:
-    name: flake8
+

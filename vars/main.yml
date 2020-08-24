@@ -1,10 +1,10 @@
 ---
 packages_2_be_installed:
   - postgresql
-  - golang-go
+  - golang-1.14-go
   - nginx
   - git
-  - python-psycopg2
+  - python3-psycopg2
 
 gopath: "/go"
 

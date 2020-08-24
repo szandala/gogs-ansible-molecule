@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Install gnupg & software-properties-common
+      apt:
+        name: [gnupg, software-properties-common]
+
+    - name: Run gogs role
+      include_role:
+        name: gogs

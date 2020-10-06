@@ -38,7 +38,7 @@ def _determine_packages_per_distro(distro):
             "nginx",
             "git"
         ]
-    # TODO: add more distros in future
+    raise EnvironmentError(f"Distribution {distro} not supported")
 
 def test_gogs_is_running(host):
     gogs = host.service("gogs")

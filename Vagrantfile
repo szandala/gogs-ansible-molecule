@@ -12,6 +12,7 @@ Vagrant.configure("2") do |config|
     am.vm.hostname = am_vm_name
   end
 
+  config.vm.provision "shell", inline: "ln -s /vagrant /gogs"
   config.vm.provision "shell", inline: "yum install -y git python3-pip yum-utils vim tree"
   config.vm.provision "shell", inline: "pip3 install ansible==2.9.12 ansible-lint==4.3.0"
   config.vm.provision "shell", inline: "pip3 install molecule==3.0.7 docker"

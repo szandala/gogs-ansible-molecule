@@ -3,7 +3,7 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint: ansible-lint . || true
+lint: ansible-lint .
 platforms:
   - name: instance
     no_log: false

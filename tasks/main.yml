@@ -4,7 +4,8 @@
     name: gogs
     shell: /usr/sbin/nologin
 
-- apt_repository:
+- name: Adding Go repository
+  apt_repository:
     repo: ppa:longsleep/golang-backports
 
 - name: Installing packages
@@ -19,6 +20,7 @@
     path: "{{ gopath }}"
     state: directory
     owner: gogs
+    mode: 0775
 
 - name: Getting Gogs & ska.
   git:
@@ -65,12 +67,14 @@
   file:
     path: "{{ gopath }}/custom/conf/"
     state: directory
+    mode: 0775
 
 - name: Copy a new app.ini file into place
   template:
     src: app.ini.j2
     dest: "{{ gopath }}/custom/conf/app.ini"
     backup: yes
+    mode: 0664
   notify: gogs_restart
 
 - name: Install gogs as a service
@@ -78,4 +82,5 @@
     src: gogs.service.j2
     dest: "/etc/systemd/system/gogs.service"
     backup: yes
+    mode: 0664
   notify: gogs_restart
